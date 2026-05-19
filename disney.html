@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disneyland Paris · Partner Hotel Dashboard | Amy Fofana</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --rose-gold: #D4A88A; --nude: #C9A88A; --cream: #F5EDE5;
+            --soft-brown: #8B7968; --dark-brown: #6B5D56; --light: #FAFAF8;
+            --disney-purple: #6B4FA0; --disney-dark: #1a1025;
+        }
+        body { font-family: 'DM Sans', sans-serif; background: var(--light); color: var(--dark-brown); overflow-x: hidden; line-height: 1.6; }
+
+        /* Scroll progress */
+        #progress { position: fixed; top: 0; left: 0; height: 3px; background: linear-gradient(90deg, var(--rose-gold), var(--nude)); width: 0%; z-index: 9999; }
+
+        /* NAV */
+        nav { position: fixed; top: 3px; width: 100%; padding: 1.1rem 5%; display: flex; justify-content: space-between; align-items: center; z-index: 1000; backdrop-filter: blur(20px); background: rgba(250,250,248,0.95); box-shadow: 0 2px 20px rgba(0,0,0,0.05); }
+        .back-btn { text-decoration: none; color: var(--rose-gold); font-weight: 600; display: flex; align-items: center; gap: 0.5rem; transition: all 0.3s; font-size: 0.9rem; }
+        .back-btn:hover { color: var(--dark-brown); transform: translateX(-4px); }
+        .back-btn svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+        .nav-r { display: flex; gap: 1.5rem; }
+        .nav-r a { text-decoration: none; color: var(--soft-brown); font-size: 0.85rem; font-weight: 500; transition: color 0.3s; }
+        .nav-r a:hover { color: var(--rose-gold); }
+        .lang-toggle { display:flex; align-items:center; background:rgba(212,168,138,0.12); border-radius:50px; padding:3px; border:1px solid rgba(212,168,138,0.25); }
+        .lang-btn { padding:0.3rem 0.8rem; border-radius:50px; border:none; background:transparent; font-size:0.78rem; font-weight:700; cursor:pointer; transition:all 0.25s; color:var(--soft-brown); font-family:'DM Sans',sans-serif; }
+        .lang-btn.active { background:var(--rose-gold); color:white; }
+
+        /* HERO */
+        .hero {
+            min-height: 100vh;
+            display: flex; align-items: center; justify-content: center;
+            background: linear-gradient(135deg, var(--disney-dark) 0%, #2d1f45 50%, #1a1025 100%);
+            position: relative; overflow: hidden; padding: 6rem 5% 4rem;
+        }
+        /* Étoiles Disney */
+        .stars { position: absolute; inset: 0; overflow: hidden; }
+        .star { position: absolute; width: 2px; height: 2px; background: white; border-radius: 50%; animation: twinkle var(--d, 3s) ease-in-out infinite; opacity: 0; }
+        @keyframes twinkle { 0%,100%{opacity:0} 50%{opacity:var(--o,0.8)} }
+
+        /* Arc violet en haut */
+        .hero::before { content: ''; position: absolute; top: -200px; left: 50%; transform: translateX(-50%); width: 900px; height: 400px; background: radial-gradient(ellipse, rgba(107,79,160,0.4) 0%, transparent 70%); pointer-events: none; }
+
+        .hero-content { text-align: center; color: white; z-index: 2; max-width: 900px; }
+        .hero-badge { display: inline-flex; align-items: center; gap: 0.6rem; padding: 0.6rem 1.4rem; background: rgba(107,79,160,0.3); backdrop-filter: blur(10px); border-radius: 50px; margin-bottom: 2rem; font-weight: 600; letter-spacing: 1.5px; font-size: 0.78rem; text-transform: uppercase; border: 1px solid rgba(107,79,160,0.5); color: #c4b0e8; }
+        .hero-badge svg { width: 14px; height: 14px; stroke: #c4b0e8; fill: none; stroke-width: 2; }
+        .hero-eyebrow { font-size: 0.85rem; color: rgba(255,255,255,0.5); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 1rem; }
+        .hero h1 { font-family: 'Cormorant Garamond', serif; font-size: 5.5rem; font-weight: 700; letter-spacing: -2px; line-height: 1; margin-bottom: 0.8rem; }
+        .hero h1 span { color: var(--rose-gold); }
+        .hero-sub { font-size: 1.15rem; opacity: 0.75; max-width: 650px; margin: 0 auto 1rem; line-height: 1.7; }
+        .hero-tags { display: flex; gap: 0.8rem; justify-content: center; flex-wrap: wrap; margin-bottom: 3rem; margin-top: 1rem; }
+        .hero-tag { padding: 0.4rem 1rem; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); border-radius: 20px; font-size: 0.8rem; color: rgba(255,255,255,0.7); }
+        .hero-cta { display: inline-flex; align-items: center; gap: 0.5rem; padding: 1rem 2.5rem; background: var(--rose-gold); color: white; text-decoration: none; border-radius: 50px; font-weight: 700; font-size: 0.95rem; transition: all 0.3s; box-shadow: 0 15px 40px rgba(212,168,138,0.3); }
+        .hero-cta:hover { background: var(--nude); transform: translateY(-3px); }
+        .hero-cta svg { width: 16px; height: 16px; stroke: white; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+        /* SECTIONS */
+        section { padding: 8rem 5%; }
+        .section-label { font-size: 0.78rem; color: var(--rose-gold); font-weight: 700; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 0.8rem; }
+        .section-title { font-family: 'Cormorant Garamond', serif; font-size: 3.5rem; font-weight: 700; color: var(--dark-brown); letter-spacing: -1px; line-height: 1.1; margin-bottom: 1rem; }
+        .section-intro { font-size: 1.1rem; line-height: 1.85; color: #555; max-width: 800px; }
+
+        /* CONTEXTE */
+        #context { background: white; }
+        .context-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; margin-top: 4rem; align-items: start; }
+        .context-text p { font-size: 1rem; line-height: 1.85; color: #555; margin-bottom: 1.3rem; }
+        .context-text strong { color: var(--rose-gold); font-weight: 600; }
+        /* KPI chips */
+        .kpi-chips { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .kpi-chip { background: var(--cream); border-radius: 18px; padding: 1.5rem; text-align: center; transition: transform 0.3s; }
+        .kpi-chip:hover { transform: translateY(-4px); }
+        .kpi-chip-value { font-family: 'Cormorant Garamond', serif; font-size: 2.2rem; font-weight: 700; color: var(--rose-gold); display: block; line-height: 1; }
+        .kpi-chip-label { font-size: 0.8rem; color: #777; margin-top: 0.4rem; display: block; }
+
+        /* WORKFLOW */
+        #workflow { background: linear-gradient(135deg, var(--disney-dark) 0%, #2d1f45 100%); color: white; }
+        #workflow .section-title { color: white; }
+        #workflow .section-intro { color: rgba(255,255,255,0.7); }
+        .workflow-steps { display: flex; align-items: center; gap: 0; margin-top: 4rem; flex-wrap: wrap; justify-content: center; }
+        .workflow-step { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 2rem 1.8rem; text-align: center; flex: 1; min-width: 160px; max-width: 200px; transition: transform 0.3s, background 0.3s; }
+        .workflow-step:hover { transform: translateY(-6px); background: rgba(255,255,255,0.12); }
+        .workflow-step-icon { width: 50px; height: 50px; background: rgba(212,168,138,0.15); border-radius: 14px; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; }
+        .workflow-step-icon svg { width: 24px; height: 24px; stroke: var(--rose-gold); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+        .workflow-step h4 { font-size: 0.9rem; font-weight: 600; color: white; margin-bottom: 0.5rem; }
+        .workflow-step p { font-size: 0.78rem; color: rgba(255,255,255,0.5); line-height: 1.5; }
+        .workflow-arrow { color: rgba(212,168,138,0.4); font-size: 1.5rem; margin: 0 0.5rem; flex-shrink: 0; }
+
+        /* DASHBOARDS */
+        #dashboards { background: var(--light); }
+        .dash-tabs { display: flex; gap: 0.6rem; margin-bottom: 2.5rem; flex-wrap: wrap; }
+        .dash-tab { padding: 0.6rem 1.4rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.3s; border: 2px solid rgba(212,168,138,0.3); color: var(--soft-brown); background: white; }
+        .dash-tab.active { background: var(--rose-gold); color: white; border-color: var(--rose-gold); }
+        .dash-tab:hover:not(.active) { border-color: var(--rose-gold); color: var(--rose-gold); }
+        /* Dashboard panels */
+        .dash-panel { display: none; }
+        .dash-panel.active { display: block; }
+        .dash-screen { border-radius: 18px; overflow: hidden; box-shadow: 0 25px 80px rgba(0,0,0,0.15); border: 1px solid rgba(0,0,0,0.06); cursor: zoom-in; transition: transform 0.3s, box-shadow 0.3s; }
+        .dash-screen:hover { transform: scale(1.01); box-shadow: 0 40px 100px rgba(0,0,0,0.2); }
+        .dash-screen img { width: 100%; height: auto; display: block; }
+        .dash-desc { margin-top: 2rem; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.2rem; }
+        .dash-desc-item { background: white; border-radius: 14px; padding: 1.3rem; border: 1px solid rgba(212,168,138,0.12); }
+        .dash-desc-item svg { width: 20px; height: 20px; stroke: var(--rose-gold); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; margin-bottom: 0.6rem; }
+        .dash-desc-item h4 { font-size: 0.88rem; font-weight: 600; color: var(--dark-brown); margin-bottom: 0.3rem; }
+        .dash-desc-item p { font-size: 0.8rem; color: #888; line-height: 1.5; }
+
+        /* Lightbox */
+        .lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 9000; align-items: center; justify-content: center; padding: 2rem; cursor: zoom-out; }
+        .lightbox.open { display: flex; }
+        .lightbox img { max-width: 95vw; max-height: 92vh; border-radius: 12px; object-fit: contain; box-shadow: 0 40px 120px rgba(0,0,0,0.8); }
+        .lightbox-close { position: absolute; top: 1.5rem; right: 1.5rem; color: white; font-size: 1.5rem; cursor: pointer; background: rgba(255,255,255,0.1); width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: background 0.3s; }
+        .lightbox-close:hover { background: rgba(255,255,255,0.25); }
+
+        /* SKILLS */
+        #skills-disney { background: white; }
+        .skills-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 3rem; }
+        .skill-item { background: var(--cream); border-radius: 18px; padding: 2rem; transition: transform 0.3s; }
+        .skill-item:hover { transform: translateY(-4px); }
+        .skill-item svg { width: 26px; height: 26px; stroke: var(--rose-gold); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; margin-bottom: 1rem; display: block; }
+        .skill-item h4 { font-size: 1rem; font-weight: 700; color: var(--dark-brown); margin-bottom: 0.5rem; }
+        .skill-item p { font-size: 0.85rem; color: #777; line-height: 1.6; }
+
+        /* CTA */
+        #cta-disney { background: linear-gradient(135deg, var(--disney-dark), #2d1f45); color: white; text-align: center; }
+        #cta-disney h2 { font-family: 'Cormorant Garamond', serif; font-size: 3.5rem; margin-bottom: 1rem; font-weight: 700; }
+        #cta-disney p { font-size: 1.1rem; max-width: 580px; margin: 0 auto 3rem; opacity: 0.75; line-height: 1.7; }
+        .cta-btns { display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; }
+        .cta-w { padding: 1.1rem 2.8rem; background: var(--rose-gold); color: white; text-decoration: none; border-radius: 50px; font-weight: 700; transition: all 0.3s; }
+        .cta-w:hover { background: var(--nude); transform: translateY(-3px); }
+        .cta-o { padding: 1.1rem 2.8rem; background: transparent; color: white; text-decoration: none; border-radius: 50px; font-weight: 700; border: 2px solid rgba(255,255,255,0.4); transition: all 0.3s; }
+        .cta-o:hover { border-color: white; background: rgba(255,255,255,0.1); }
+
+        /* RESPONSIVE */
+        @media(max-width:900px) {
+            .hero h1 { font-size: 3.5rem; }
+            .section-title { font-size: 2.4rem; }
+            .context-grid { grid-template-columns: 1fr; gap: 3rem; }
+            .workflow-steps { gap: 0.5rem; }
+            .workflow-arrow { display: none; }
+            .dash-desc { grid-template-columns: 1fr; }
+            .skills-grid { grid-template-columns: 1fr 1fr; }
+            section { padding: 5rem 5%; }
+            .nav-r { display: none; }
+        }
+        @media(max-width:560px) {
+            .hero h1 { font-size: 2.8rem; }
+            .skills-grid { grid-template-columns: 1fr; }
+            .kpi-chips { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="progress"></div>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <div class="lightbox-close" onclick="closeLightbox()">✕</div>
+    <img id="lightbox-img" src="" alt="">
+</div>
+
+<nav>
+    <a href="index.html" class="back-btn">
+        <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+        <span data-fr="Portfolio" data-en="Portfolio">Portfolio</span>
+    </a>
+    <div style="display:flex;align-items:center;gap:1.5rem;">
+        <div class="nav-r">
+            <a href="#context" data-fr="Contexte" data-en="Context">Contexte</a>
+            <a href="#workflow" data-fr="Workflow" data-en="Workflow">Workflow</a>
+            <a href="#dashboards" data-fr="Dashboards" data-en="Dashboards">Dashboards</a>
+        </div>
+        <div class="lang-toggle">
+            <button class="lang-btn" onclick="setLang('fr')">FR</button>
+            <button class="lang-btn" onclick="setLang('en')">EN</button>
+        </div>
+    </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+    <!-- Étoiles -->
+    <div class="stars" id="stars"></div>
+
+    <div class="hero-content">
+        <div class="hero-badge">
+            <svg viewBox="0 0 24 24"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
+            Disneyland Paris · Alternance 2025–2026
+        </div>
+        <p class="hero-eyebrow" data-fr="Projet Data & Pricing" data-en="Data & Pricing Project">Projet Data & Pricing</p>
+        <h1>Partner Hotel<br><span>Dashboard</span></h1>
+        <p class="hero-sub">Tableau de bord Tableau pour le suivi de la performance des 7 hôtels partenaires — de la requête SAP au dashboard interactif.</p>
+        <div class="hero-tags">
+            <span class="hero-tag">Tableau</span>
+            <span class="hero-tag">SQL · Snowflake</span>
+            <span class="hero-tag">SAP</span>
+            <span class="hero-tag">Pricing · Revenue</span>
+            <span class="hero-tag">7 Hôtels partenaires</span>
+        </div>
+        <a href="#dashboards" class="hero-cta">
+            data-fr="Voir les dashboards" data-en="View dashboards"
+            >Voir les dashboards
+            <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </a>
+    </div>
+</section>
+
+<!-- CONTEXTE -->
+<section id="context">
+    <div class="section-label" data-fr="CONTEXTE" data-en="CONTEXT">CONTEXTE</div>
+    <div style="display:flex; align-items:flex-start; justify-content:space-between; flex-wrap:wrap; gap:1rem; margin-bottom:0.5rem;">
+        <h2 class="section-title" style="margin-bottom:0;">Référente performance<br>hôtels partenaires</h2>
+        <img src="images/logo_disney.png" alt="Disneyland Paris"
+             style="height:52px; width:auto; object-fit:contain; opacity:0.85; margin-top:0.5rem;"
+             onerror="this.style.display='none'">
+    </div>
+
+    <div class="context-grid">
+        <div class="context-text">
+            <p>
+                data-fr="Depuis le lancement de la nouvelle offre packages en <strong>octobre 2025</strong>, je suis référente data pour les <strong>7 hôtels partenaires</strong> de Disneyland Paris (B&amp;B Hotel, Adagio, Campanile, StayCity, Ki Space, Algonquin's, Hotel l'Elysée)." data-en="Since the launch of the new packages offering in <strong>October 2025</strong>, I have been the data performance lead for the <strong>7 partner hotels</strong> of Disneyland Paris (B&amp;B Hotel, Adagio, Campanile, StayCity, Ki Space, Algonquin's, Hotel l'Elysée)."
+            >Depuis le lancement de la nouvelle offre packages en <strong>octobre 2025</strong>, je suis référente data pour les <strong>7 hôtels partenaires</strong> de Disneyland Paris (B&B Hotel, Adagio, Campanile, StayCity, Ki Space, Algonquin's, Hotel l'Elysée).
+            </p>
+            <p>
+                data-fr="L'enjeu : construire un <strong>workflow analytics complet et automatisé</strong> — de l'extraction des données brutes SAP jusqu'aux dashboards consultés chaque semaine par les équipes Yield, Sales et Marketing." data-en="The challenge: build a <strong>complete and automated analytics workflow</strong> — from raw SAP data extraction to dashboards reviewed weekly by Yield, Sales and Marketing teams."
+            >L'enjeu : construire un <strong>workflow analytics complet et automatisé</strong> — de l'extraction des données brutes SAP jusqu'aux dashboards consultés chaque semaine par les équipes Yield, Sales et Marketing.
+            </p>
+            <p>
+                data-fr="J'ai créé <strong>2 dashboards Tableau</strong> (Partner Hotels + Onsite Disney Hotels), chacun composé de <strong>4 pages interactives</strong> avec paramètres, filtres dynamiques et comparaisons année précédente." data-en="I built <strong>2 Tableau dashboards</strong> (Partner Hotels + Onsite Disney Hotels), each with <strong>4 interactive pages</strong> including parameters, dynamic filters and year-on-year comparisons."
+            >J'ai créé <strong>2 dashboards Tableau</strong> (Partner Hotels + Onsite Disney Hotels), chacun composé de <strong>4 pages interactives</strong> avec paramètres, filtres dynamiques et comparaisons année précédente.
+            </p>
+        </div>
+        <div class="kpi-chips">
+            <div class="kpi-chip">
+                <span class="kpi-chip-value">7</span>
+                <span class="kpi-chip-label" data-fr="Hôtels partenaires suivis" data-en="Partner hotels tracked">Hôtels partenaires suivis</span>
+            </div>
+            <div class="kpi-chip">
+                <span class="kpi-chip-value">2</span>
+                <span class="kpi-chip-label" data-fr="Dashboards Tableau créés" data-en="Tableau dashboards built">Dashboards Tableau créés</span>
+            </div>
+            <div class="kpi-chip">
+                <span class="kpi-chip-value">4</span>
+                <span class="kpi-chip-label" data-fr="Pages par dashboard" data-en="Pages per dashboard">Pages par dashboard</span>
+            </div>
+            <div class="kpi-chip">
+                <span class="kpi-chip-value">3</span>
+                <span class="kpi-chip-label" data-fr="Équipes utilisatrices" data-en="Teams using it">Équipes utilisatrices</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- WORKFLOW -->
+<section id="workflow">
+    <div class="section-label" data-fr="WORKFLOW TECHNIQUE" data-en="TECHNICAL WORKFLOW">WORKFLOW TECHNIQUE</div>
+    <h2 class="section-title" style="color:white;">De la donnée brute<br>au dashboard</h2>
+    <p class="section-intro">Un pipeline end-to-end construit et maintenu en autonomie, de l'extraction jusqu'à la présentation aux équipes business.</p>
+
+    <div class="workflow-steps">
+        <div class="workflow-step">
+            <div class="workflow-step-icon">
+                <svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+            </div>
+            <h4>SAP Legacy</h4>
+            <p data-fr="Extraction requêtes données brutes réservations" data-en="Raw booking data extraction queries">Extraction requêtes données brutes réservations</p>
+        </div>
+        <div class="workflow-arrow">→</div>
+        <div class="workflow-step">
+            <div class="workflow-step-icon">
+                <svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            </div>
+            <h4>SQL · Snowflake</h4>
+            <p data-fr="Migration, nettoyage et structuration des données" data-en="Migration, cleaning and data structuring">Migration, nettoyage et structuration des données</p>
+        </div>
+        <div class="workflow-arrow">→</div>
+        <div class="workflow-step">
+            <div class="workflow-step-icon">
+                <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            </div>
+            <h4>Excel</h4>
+            <p data-fr="Modèles de pricing, calculs KPIs, data quality checks" data-en="Pricing models, KPI calculations, data quality checks">Modèles de pricing, calculs KPIs, data quality checks</p>
+        </div>
+        <div class="workflow-arrow">→</div>
+        <div class="workflow-step">
+            <div class="workflow-step-icon">
+                <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+            </div>
+            <h4>Tableau</h4>
+            <p data-fr="Dashboards interactifs, paramètres, comparaisons PY" data-en="Interactive dashboards, parameters, YoY comparisons">Dashboards interactifs, paramètres, comparaisons PY</p>
+        </div>
+        <div class="workflow-arrow">→</div>
+        <div class="workflow-step">
+            <div class="workflow-step-icon">
+                <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+            </div>
+            <h4>Présentation</h4>
+            <p data-fr="Yield, Sales &amp; Marketing — hebdomadaire" data-en="Yield, Sales &amp; Marketing — weekly">Yield, Sales & Marketing — hebdomadaire</p>
+        </div>
+    </div>
+</section>
+
+<!-- DASHBOARDS -->
+<section id="dashboards">
+    <div class="section-label" data-fr="DASHBOARDS TABLEAU" data-en="TABLEAU DASHBOARDS">DASHBOARDS TABLEAU</div>
+    <h2 class="section-title">Partner Hotel Dashboard</h2>
+    <p class="section-intro">4 pages interactives pour suivre la performance des hôtels partenaires sous tous les angles. Cliquez sur une image pour l'agrandir.</p></p>
+
+    <!-- Tabs -->
+    <div class="dash-tabs" style="margin-top:2.5rem;">
+        <div class="dash-tab active" onclick="switchTab(0)" data-fr="Vue d'ensemble" data-en="Overview">Vue d'ensemble</div>
+        <div class="dash-tab" onclick="switchTab(1)" data-fr="Comparaison offres LOS" data-en="LOS Offer Comparison">Comparaison offres LOS</div>
+        <div class="dash-tab" onclick="switchTab(2)" data-fr="Country &amp; Hotel Mix" data-en="Country &amp; Hotel Mix">Country & Hotel Mix</div>
+        <div class="dash-tab" onclick="switchTab(3)" data-fr="Onsite vs Partner Hotel" data-en="Onsite vs Partner Hotel">Onsite vs Partner Hotel</div>
+    </div>
+
+    <!-- Panel 1 - Overview -->
+    <div class="dash-panel active" id="panel-0">
+        <div class="dash-screen" onclick="openLightbox('images/Dash_Overview_blurred.png')">
+            <img src="images/Dash_Overview_blurred.png" alt="Partner Hotel Dashboard - Overview">
+        </div>
+        <div class="dash-desc">
+            <div class="dash-desc-item">
+                <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+                <h4>KPIs en temps réel</h4>
+                <p>Room Nights, Package Revenue, Bookings, Avg LOS, Tickets — avec variation vs année précédente.</p>
+            </div>
+            <div class="dash-desc-item">
+                <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                <h4>Tendances mensuelles</h4>
+                <p>Evolution des bookings par mois d'arrivée — comparaison A26 vs PY avec détail par pays.</p>
+            </div>
+            <div class="dash-desc-item">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+                <h4>Dimension pays</h4>
+                <p>Tableau de performance par marché (France, Iberia, UK-Ireland, Germany-Austria…).</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Panel 2 - Offer Comparison -->
+    <div class="dash-panel" id="panel-1">
+        <div class="dash-screen" onclick="openLightbox('images/Dash_Offer_blurred.png')">
+            <img src="images/Dash_Offer_blurred.png" alt="Partner Hotel Dashboard - Offer Comparison">
+        </div>
+        <div class="dash-desc">
+            <div class="dash-desc-item">
+                <svg viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+                <h4>Split LOS vs LOS+1</h4>
+                <p>Répartition des bookings entre offres LOS et LOS+1 — pie chart et structure par durée de séjour.</p>
+            </div>
+            <div class="dash-desc-item">
+                <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+                <h4>Performance par hôtel</h4>
+                <p>Classement des 8 hôtels partenaires (BnB, Adagio, Campanile…) sur les bookings LOS vs LOS+1.</p>
+            </div>
+            <div class="dash-desc-item">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+                <h4>Offer Mix par marché</h4>
+                <p>Iberia, UK-Ireland, France, Italy, Germany-Austria — comparaison des offres par zone géographique.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Panel 3 - Country Mix -->
+    <div class="dash-panel" id="panel-2">
+        <div class="dash-screen" onclick="openLightbox('images/Dash_Country_blurred.png')">
+            <img src="images/Dash_Country_blurred.png" alt="Partner Hotel Dashboard - Country & Hotel Mix">
+        </div>
+        <div class="dash-desc">
+            <div class="dash-desc-item">
+                <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+                <h4>Heatmap LOS / LOS+1</h4>
+                <p>Matrice croisée offre × pays pour visualiser la dominance de chaque offre par marché.</p>
+            </div>
+            <div class="dash-desc-item">
+                <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                <h4>Bar chart par pays</h4>
+                <p>LOS Packages Bookings by Country — ranking et comparaison PY des principaux marchés source.</p>
+            </div>
+            <div class="dash-desc-item">
+                <svg viewBox="0 0 24 24"><path d="M21.21 15.89A10 10 0 118 2.83"/><path d="M22 12A10 10 0 0012 2v10z"/></svg>
+                <h4>Part de marché</h4>
+                <p>Pie chart de la répartition LOS vs LOS+1 globale — Grand Total par pays source.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Panel 4 - Onsite vs Partner -->
+    <div class="dash-panel" id="panel-3">
+        <div class="dash-screen" onclick="openLightbox('images/Dash_Onsite_blurred.png')">
+            <img src="images/Dash_Onsite_blurred.png" alt="Partner Hotel Dashboard - Onsite vs Partner Hotel">
+        </div>
+        <div class="dash-desc">
+            <div class="dash-desc-item">
+                <svg viewBox="0 0 24 24"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg>
+                <h4>Offsite vs Onsite</h4>
+                <p>Comparaison côte à côte des KPIs hôtels partenaires vs hôtels Disney — Room Nights, Revenue, PDR, LOS.</p>
+            </div>
+            <div class="dash-desc-item">
+                <svg viewBox="0 0 24 24"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+                <h4>Variation vs PY</h4>
+                <p>Colonnes P1, P2 et Var vs année précédente pour chaque KPI — identification des gaps de performance.</p>
+            </div>
+            <div class="dash-desc-item">
+                <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                <h4>Growth by arrival month</h4>
+                <p>Line charts de l'évolution des bookings Offsite et Onsite mois par mois sur toute la période.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- COMPÉTENCES -->
+<section id="skills-disney">
+    <div class="section-label" data-fr="COMPÉTENCES MOBILISÉES" data-en="SKILLS USED">COMPÉTENCES MOBILISÉES</div>
+    <h2 class="section-title">Ce que ce projet<br>m'a apporté</h2>
+
+    <div class="skills-grid">
+        <div class="skill-item">
+            <svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+            <h4>SQL & Snowflake</h4>
+            <p>Requêtes complexes, migration depuis SAP legacy, data quality checks et modélisation des données de réservation.</p>
+        </div>
+        <div class="skill-item">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+            <h4>Tableau avancé</h4>
+            <p>Dashboards multi-pages, paramètres interactifs, calculated fields, comparaisons dynamiques année précédente.</p>
+        </div>
+        <div class="skill-item">
+            <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+            <h4>Pricing & Revenue</h4>
+            <p>Suivi KPIs ADR, PDR, Package Revenue, LOS — analyse des saisons pricing et optimisation des quotas.</p>
+        </div>
+        <div class="skill-item">
+            <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+            <h4>Stakeholder Management</h4>
+            <p>Présentations hebdomadaires aux équipes Yield Hotel, Yield Park, Sales et Marketing.</p>
+        </div>
+        <div class="skill-item">
+            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <h4>Modélisation Excel</h4>
+            <p>Modèles de pricing dynamique, simulation de scénarios, calcul de marges et seuils de rentabilité.</p>
+        </div>
+        <div class="skill-item">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+            <h4>Vision Business</h4>
+            <p>Analyse post-lancement Land Frozen, optimisation quotas, recommandations stratégiques pricing.</p>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section id="cta-disney">
+    <h2 data-fr="Voir mes autres projets" data-en="See my other projects">Voir mes autres projets</h2>
+    <p>Découvrez AURA Shade, mon projet de pricing strategy dans le secteur beauté, ou revenez au portfolio.</p>
+    <div class="cta-btns">
+        <a href="index.html" class="cta-w" data-fr="← Retour au portfolio" data-en="← Back to portfolio">← Retour au portfolio</a>
+        <a href="aura-shade.html" class="cta-o" data-fr="Projet AURA Shade →" data-en="AURA Shade project →">Projet AURA Shade →</a>
+    </div>
+</section>
+
+<script>
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Scroll progress
+    window.addEventListener('scroll', () => {
+        document.getElementById('progress').style.width =
+            (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight) * 100) + '%';
+    });
+
+    // Étoiles générées dynamiquement
+    const starsContainer = document.getElementById('stars');
+    for (let i = 0; i < 80; i++) {
+        const s = document.createElement('div');
+        s.className = 'star';
+        s.style.cssText = `
+            left:${Math.random()*100}%;
+            top:${Math.random()*100}%;
+            --d:${2 + Math.random()*4}s;
+            --o:${0.4 + Math.random()*0.6};
+            animation-delay:${Math.random()*4}s;
+            width:${Math.random() > 0.8 ? 3 : 2}px;
+            height:${Math.random() > 0.8 ? 3 : 2}px;
+        `;
+        starsContainer.appendChild(s);
+    }
+
+    // Tabs dashboard
+    function switchTab(index) {
+        document.querySelectorAll('.dash-tab').forEach((t,i) => t.classList.toggle('active', i === index));
+        document.querySelectorAll('.dash-panel').forEach((p,i) => p.classList.toggle('active', i === index));
+    }
+
+    // Lightbox
+    function openLightbox(src) {
+        document.getElementById('lightbox-img').src = src;
+        document.getElementById('lightbox').classList.add('open');
+    }
+    function closeLightbox() {
+        document.getElementById('lightbox').classList.remove('open');
+    }
+    document.addEventListener('keydown', e => { if(e.key === 'Escape') closeLightbox(); });
+
+    // Animations
+    function anim(sel, from) {
+        gsap.utils.toArray(sel).forEach(el => {
+            gsap.fromTo(el, { opacity:0, ...from }, {
+                opacity:1, y:0, x:0, scale:1, duration:0.9, ease:'power2.out',
+                scrollTrigger: { trigger:el, start:'top 90%', toggleActions:'play none none none' }
+            });
+        });
+    }
+    anim('.kpi-chip', { y:25 });
+    anim('.workflow-step', { y:40 });
+    anim('.dash-screen', { y:40, scale:0.98 });
+    anim('.dash-desc-item', { y:25 });
+    anim('.skill-item', { y:30 });
+
+    // ── LANG TOGGLE ───────────────────────────────────────────────
+    function setLang(lang) {
+        localStorage.setItem('lang', lang);
+        document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.textContent === lang.toUpperCase()));
+        document.querySelectorAll('[data-fr][data-en]').forEach(el => {
+            const val = el.getAttribute('data-' + lang);
+            if (val) el.innerHTML = val;
+        });
+        document.documentElement.lang = lang;
+    }
+    // Apply saved lang on load
+    setLang(localStorage.getItem('lang') || 'fr');
+
+    // Smooth scroll
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+        a.addEventListener('click', e => {
+            e.preventDefault();
+            const t = document.querySelector(a.getAttribute('href'));
+            if (t) t.scrollIntoView({ behavior:'smooth', block:'start' });
+        });
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amy Fofana | Pricing Analyst</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root { --rose-gold:#D4A88A; --nude:#C9A88A; --cream:#F5EDE5; --soft-brown:#8B7968; --dark-brown:#6B5D56; --light:#FAFAF8; }
+        body { font-family:'DM Sans',sans-serif; background:var(--light); color:var(--dark-brown); overflow-x:hidden; line-height:1.6; }
+
+        /* NAV */
+        nav { position:fixed; top:0; width:100%; padding:1.2rem 5%; display:flex; justify-content:space-between; align-items:center; z-index:1000; backdrop-filter:blur(20px); background:rgba(250,250,248,0.92); transition:box-shadow 0.3s; }
+        nav.scrolled { box-shadow:0 2px 20px rgba(0,0,0,0.07); }
+        .logo { font-family:'Cormorant Garamond',serif; font-size:1.8rem; font-weight:700; color:var(--rose-gold); letter-spacing:1px; }
+        .nav-links { display:flex; gap:2rem; list-style:none; align-items:center; }
+        .nav-links a { text-decoration:none; color:var(--dark-brown); font-weight:500; font-size:0.9rem; transition:color 0.3s; }
+        .nav-links a:hover { color:var(--rose-gold); }
+        .nav-links .nav-cta { background:var(--rose-gold); color:white !important; padding:0.55rem 1.4rem; border-radius:50px; }
+        .nav-links .nav-cta:hover { background:var(--nude); }
+        /* Lang toggle */
+        .lang-toggle { display:flex; align-items:center; gap:0; background:var(--cream); border-radius:50px; padding:3px; border:1px solid rgba(212,168,138,0.3); }
+        .lang-btn { padding:0.3rem 0.8rem; border-radius:50px; border:none; background:transparent; font-size:0.78rem; font-weight:700; cursor:pointer; transition:all 0.25s; color:var(--soft-brown); font-family:'DM Sans',sans-serif; }
+        .lang-btn.active { background:var(--rose-gold); color:white; }
+        .nav-right-group { display:flex; align-items:center; gap:1.5rem; }
+        .hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; }
+        .hamburger span { width:24px; height:2px; background:var(--dark-brown); border-radius:2px; }
+        .mobile-menu { display:none; position:fixed; top:68px; left:0; right:0; background:rgba(250,250,248,0.98); backdrop-filter:blur(20px); padding:1.5rem 5%; z-index:999; box-shadow:0 10px 30px rgba(0,0,0,0.08); flex-direction:column; gap:1.2rem; }
+        .mobile-menu.open { display:flex; }
+        .mobile-menu a { text-decoration:none; color:var(--dark-brown); font-weight:500; font-size:1.05rem; padding-bottom:0.8rem; border-bottom:1px solid rgba(212,168,138,0.15); }
+
+        /* HERO */
+        .hero { min-height:100vh; display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden; background:linear-gradient(150deg,var(--cream) 0%,#FDFCFA 60%,#EFE5DB 100%); padding:8rem 5% 4rem; }
+        .shape { position:absolute; border-radius:50%; }
+        .shape1 { width:500px; height:500px; background:var(--rose-gold); opacity:0.07; top:-150px; right:-100px; }
+        .shape2 { width:350px; height:350px; background:var(--nude); opacity:0.06; bottom:-80px; left:-80px; }
+        .hero-content { text-align:center; z-index:2; max-width:860px; }
+        .hero-photo { width:170px; height:170px; border-radius:50%; object-fit:cover; margin:0 auto 2.5rem; display:block; border:4px solid var(--rose-gold); box-shadow:0 20px 60px rgba(212,168,138,0.35); }
+        .photo-placeholder { width:170px; height:170px; border-radius:50%; margin:0 auto 2.5rem; display:none; align-items:center; justify-content:center; border:4px solid var(--rose-gold); background:linear-gradient(135deg,var(--rose-gold),var(--nude)); font-size:3rem; color:white; font-family:'Cormorant Garamond',serif; font-weight:700; box-shadow:0 20px 60px rgba(212,168,138,0.35); }
+        .hero h1 { font-family:'Cormorant Garamond',serif; font-size:5rem; font-weight:700; color:var(--dark-brown); letter-spacing:-2px; line-height:1; margin-bottom:0.6rem; }
+        .hero h2 { font-size:0.95rem; font-weight:400; color:var(--soft-brown); letter-spacing:2.5px; text-transform:uppercase; margin-bottom:1.5rem; }
+        .typewriter { font-size:1.15rem; color:var(--rose-gold); font-weight:500; min-height:34px; margin-bottom:2.5rem; font-style:italic; }
+        .hero-buttons { display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; }
+        .btn-main { display:inline-block; padding:1rem 2.5rem; background:var(--rose-gold); color:white; text-decoration:none; border-radius:50px; font-weight:600; font-size:0.95rem; transition:all 0.3s; box-shadow:0 10px 30px rgba(212,168,138,0.3); }
+        .btn-main:hover { background:var(--nude); transform:translateY(-2px); }
+        .btn-sec { display:inline-block; padding:1rem 2.5rem; background:transparent; color:var(--rose-gold); text-decoration:none; border-radius:50px; font-weight:600; font-size:0.95rem; border:2px solid var(--rose-gold); transition:all 0.3s; }
+        .btn-sec:hover { background:var(--rose-gold); color:white; transform:translateY(-2px); }
+
+        /* SECTIONS */
+        section { padding:8rem 5%; }
+        .section-label { font-size:0.78rem; color:var(--rose-gold); font-weight:700; text-transform:uppercase; letter-spacing:3px; margin-bottom:0.8rem; }
+        .section-title { font-family:'Cormorant Garamond',serif; font-size:3.5rem; font-weight:700; color:var(--dark-brown); letter-spacing:-1px; line-height:1.1; margin-bottom:1rem; }
+        .section-sub { font-size:1.1rem; color:var(--soft-brown); max-width:680px; margin-bottom:3rem; }
+
+        /* ABOUT */
+        #about { background:white; }
+        .about-grid { display:grid; grid-template-columns:1fr 1.5fr; gap:5rem; align-items:start; }
+        .about-left { position:sticky; top:110px; }
+        .about-stats { display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-top:2.5rem; }
+        .stat-card { text-align:center; padding:1.8rem 1.2rem; background:var(--cream); border-radius:18px; transition:transform 0.3s; }
+        .stat-card:hover { transform:translateY(-4px); }
+        .stat-number { font-family:'Cormorant Garamond',serif; font-size:2.6rem; font-weight:700; color:var(--rose-gold); display:block; line-height:1; }
+        .stat-label { font-size:0.8rem; color:#777; margin-top:0.4rem; display:block; }
+        .about-badge { display:inline-block; padding:0.5rem 1.2rem; background:var(--cream); border-radius:50px; color:var(--rose-gold); font-weight:600; font-size:0.82rem; margin-bottom:1.5rem; }
+        .about-text { font-size:1.05rem; line-height:1.9; color:#555; }
+        .about-text strong { color:var(--rose-gold); font-weight:600; }
+        .about-text p + p { margin-top:1.3rem; }
+
+        /* SKILLS */
+        #skills { background:linear-gradient(135deg,var(--cream) 0%,#FDFCFA 100%); }
+        .skills-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:2rem; }
+        .skill-cat { background:white; border-radius:22px; padding:2.5rem; box-shadow:0 8px 35px rgba(0,0,0,0.06); border:1px solid rgba(212,168,138,0.1); transition:transform 0.3s,box-shadow 0.3s; }
+        .skill-cat:hover { transform:translateY(-5px); box-shadow:0 18px 50px rgba(0,0,0,0.1); }
+        .skill-icon { display:flex; align-items:center; margin-bottom:1rem; }
+        .skill-icon svg { width:26px; height:26px; stroke:var(--rose-gold); fill:none; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+        .skill-cat-title { font-size:1rem; font-weight:700; color:var(--dark-brown); margin-bottom:1.8rem; }
+        .skill-item { margin-bottom:1.2rem; }
+        .skill-row { display:flex; justify-content:space-between; margin-bottom:0.45rem; }
+        .skill-name { font-size:0.88rem; font-weight:500; color:var(--dark-brown); }
+        .skill-pct { font-size:0.8rem; color:var(--rose-gold); font-weight:600; }
+        .skill-bar { height:5px; background:var(--cream); border-radius:10px; overflow:hidden; }
+        .skill-fill { height:100%; background:linear-gradient(90deg,var(--rose-gold),var(--nude)); border-radius:10px; width:0%; transition:width 1.3s cubic-bezier(0.4,0,0.2,1); }
+
+        /* EXPERIENCE */
+        #experience { background:white; }
+        .exp-grid { display:grid; grid-template-columns:1fr 1fr; gap:2.5rem; }
+        .exp-card { background:#FAFAF8; border-radius:26px; padding:2.8rem; border:1px solid rgba(212,168,138,0.15); box-shadow:0 8px 35px rgba(0,0,0,0.05); transition:transform 0.35s,box-shadow 0.35s; position:relative; overflow:hidden; }
+        .exp-card::before { content:''; position:absolute; top:0; left:0; right:0; height:4px; background:linear-gradient(90deg,var(--rose-gold),var(--nude)); }
+        .exp-card:hover { transform:translateY(-7px); box-shadow:0 25px 70px rgba(0,0,0,0.1); }
+        .exp-header { display:flex; align-items:center; gap:1.3rem; margin-bottom:1.8rem; }
+        .icon-box { width:60px; height:60px; background:linear-gradient(135deg,var(--rose-gold),var(--nude)); border-radius:16px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+        .icon-box svg { width:28px; height:28px; stroke:white; fill:none; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+        .exp-title h3 { font-size:1.15rem; color:var(--dark-brown); font-weight:600; margin-bottom:0.2rem; }
+        .exp-company { font-size:0.95rem; color:var(--rose-gold); font-weight:600; }
+        .exp-period { color:#888; font-size:0.82rem; margin-top:0.15rem; }
+        .exp-desc { color:#555; line-height:1.7; margin-bottom:1.3rem; font-size:0.93rem; }
+        .exp-list { list-style:none; display:flex; flex-direction:column; gap:0.65rem; }
+        .exp-list li { padding-left:1.4rem; position:relative; color:#444; font-size:0.88rem; line-height:1.6; }
+        .exp-list li::before { content:"→"; position:absolute; left:0; color:var(--rose-gold); font-weight:bold; }
+
+        /* PROJECTS */
+        #projects { background:linear-gradient(135deg,var(--cream) 0%,#FDFCFA 100%); }
+        .project-card { background:white; border-radius:28px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.08); display:grid; grid-template-columns:1fr 1.4fr; min-height:460px; margin-bottom:2rem; transition:transform 0.4s,box-shadow 0.4s; }
+        .project-card:hover { transform:translateY(-8px); box-shadow:0 40px 80px rgba(0,0,0,0.12); }
+        .project-visual { background:linear-gradient(135deg,var(--rose-gold),var(--nude)); display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden; padding:3rem; }
+        .project-visual::after { content:''; position:absolute; inset:0; background:radial-gradient(circle at 30% 30%,rgba(255,255,255,0.15),transparent 60%); }
+        .project-logo { width:75%; max-width:300px; height:auto; position:relative; z-index:1; }
+        .proj-logo-ph { position:relative; z-index:1; text-align:center; color:white; }
+        .proj-logo-ph .pn { font-family:'Cormorant Garamond',serif; font-size:3rem; font-weight:700; }
+        .proj-logo-ph .pt { font-size:0.9rem; opacity:0.85; font-style:italic; }
+        .project-info { padding:3.5rem; display:flex; flex-direction:column; justify-content:center; }
+        .project-type { font-size:0.75rem; font-weight:700; color:var(--rose-gold); text-transform:uppercase; letter-spacing:2.5px; margin-bottom:1rem; }
+        .project-info h3 { font-family:'Cormorant Garamond',serif; font-size:2.8rem; color:var(--dark-brown); font-weight:700; line-height:1.1; margin-bottom:0.5rem; }
+        .proj-tagline { font-size:1.05rem; color:var(--soft-brown); font-style:italic; margin-bottom:1.5rem; }
+        .proj-desc { font-size:0.97rem; line-height:1.8; color:#555; margin-bottom:1.8rem; }
+        .proj-tags { display:flex; flex-wrap:wrap; gap:0.6rem; margin-bottom:2rem; }
+        .p-tag { padding:0.45rem 1rem; background:var(--cream); color:var(--soft-brown); border-radius:20px; font-size:0.8rem; font-weight:600; }
+        .proj-link { display:inline-flex; align-items:center; gap:0.5rem; padding:0.95rem 2.2rem; background:var(--rose-gold); color:white; text-decoration:none; border-radius:50px; font-weight:600; font-size:0.93rem; transition:all 0.3s; width:fit-content; }
+        .proj-link:hover { background:var(--nude); transform:translateX(4px); }
+        /* Disney card */
+        .disney-card { background:white; border-radius:22px; padding:2.5rem; border:1px solid rgba(212,168,138,0.2); box-shadow:0 8px 30px rgba(0,0,0,0.06); cursor:pointer; transition:transform 0.3s,box-shadow 0.3s; display:flex; align-items:center; gap:2rem; }
+        .disney-card:hover { transform:translateY(-5px); box-shadow:0 20px 50px rgba(0,0,0,0.1); }
+        .disney-icon { width:70px; height:70px; background:linear-gradient(135deg,#6B4FA0,#4a3570); border-radius:18px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+        .disney-icon svg { width:32px; height:32px; stroke:white; fill:none; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+        .disney-info h4 { font-family:'Cormorant Garamond',serif; font-size:1.6rem; color:var(--dark-brown); margin-bottom:0.4rem; }
+        .disney-info p { color:#888; font-size:0.9rem; margin-bottom:0.8rem; }
+        .disney-link { display:inline-flex; align-items:center; gap:0.4rem; color:var(--rose-gold); font-size:0.85rem; font-weight:600; text-decoration:none; }
+        .disney-tags { display:flex; gap:0.5rem; flex-wrap:wrap; margin-bottom:0.8rem; }
+
+        /* FOOTER */
+        footer { background:var(--dark-brown); color:white; padding:5rem 5%; text-align:center; }
+        .footer-content h3 { font-family:'Cormorant Garamond',serif; font-size:2.8rem; color:var(--cream); margin-bottom:0.5rem; }
+        .footer-content > p { color:#aaa; max-width:500px; margin:1rem auto; }
+        .footer-links { display:flex; justify-content:center; gap:2rem; margin:2.5rem 0; flex-wrap:wrap; }
+        .footer-links a { display:inline-flex; align-items:center; gap:0.5rem; color:var(--rose-gold); text-decoration:none; font-size:0.97rem; transition:color 0.3s; }
+        .footer-links a svg { width:16px; height:16px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+        .footer-links a:hover { color:var(--cream); }
+        .footer-bottom { margin-top:2.5rem; padding-top:2rem; border-top:1px solid rgba(255,255,255,0.08); color:#666; font-size:0.88rem; }
+
+        /* RESPONSIVE */
+        @media(max-width:960px) {
+            .nav-links { display:none; }
+            .hamburger { display:flex; }
+            .hero h1 { font-size:3.3rem; }
+            .section-title { font-size:2.5rem; }
+            .about-grid { grid-template-columns:1fr; gap:3rem; }
+            .about-left { position:static; }
+            .skills-grid { grid-template-columns:1fr; }
+            .exp-grid { grid-template-columns:1fr; }
+            .project-card { grid-template-columns:1fr; }
+            .project-visual { min-height:260px; }
+            .disney-card { flex-direction:column; text-align:center; }
+            section { padding:5rem 5%; }
+        }
+        @media(max-width:520px) {
+            .hero h1 { font-size:2.5rem; }
+            .hero-buttons { flex-direction:column; align-items:center; }
+            .about-stats { grid-template-columns:1fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<nav id="nav">
+    <div class="logo">Amy F.</div>
+    <ul class="nav-links">
+        <li><a href="#about" data-fr="À propos" data-en="About">À propos</a></li>
+        <li><a href="#skills" data-fr="Compétences" data-en="Skills">Compétences</a></li>
+        <li><a href="#experience" data-fr="Expériences" data-en="Experience">Expériences</a></li>
+        <li><a href="#projects" data-fr="Projets" data-en="Projects">Projets</a></li>
+        <li><a href="#contact" class="nav-cta" data-fr="Contact" data-en="Contact">Contact</a></li>
+    </ul>
+    <div class="nav-right-group">
+        <div class="lang-toggle">
+            <button class="lang-btn active" onclick="setLang('fr')">FR</button>
+            <button class="lang-btn" onclick="setLang('en')">EN</button>
+        </div>
+        <div class="hamburger" id="hamburger">
+            <span></span><span></span><span></span>
+        </div>
+    </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+    <a href="#about" onclick="closeMM()" data-fr="À propos" data-en="About">À propos</a>
+    <a href="#skills" onclick="closeMM()" data-fr="Compétences" data-en="Skills">Compétences</a>
+    <a href="#experience" onclick="closeMM()" data-fr="Expériences" data-en="Experience">Expériences</a>
+    <a href="#projects" onclick="closeMM()" data-fr="Projets" data-en="Projects">Projets</a>
+    <a href="#contact" onclick="closeMM()" data-fr="Contact" data-en="Contact">Contact</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+    <div class="shape shape1"></div>
+    <div class="shape shape2"></div>
+    <div class="hero-content">
+        <img src="images/photo_amy_fofana.jpg" alt="Amy Fofana" class="hero-photo"
+             onerror="this.style.display='none'; document.getElementById('photo-ph').style.display='flex';">
+        <div class="photo-placeholder" id="photo-ph">AF</div>
+        <h1>Amy Fofana</h1>
+        <h2>Pricing Analyst</h2>
+        <div class="typewriter" id="tw"></div>
+        <div class="hero-buttons">
+            <a href="#projects" class="btn-main" data-fr="Voir mes projets" data-en="See my projects">Voir mes projets</a>
+            <a href="mailto:amyfofana162@yahoo.fr" class="btn-sec" data-fr="Me contacter" data-en="Get in touch">Me contacter</a>
+        </div>
+    </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+    <div class="about-grid">
+        <div class="about-left">
+            <div class="section-label" data-fr="À PROPOS" data-en="ABOUT">À PROPOS</div>
+            <h2 class="section-title" data-fr="Analyste<br>pricing &amp;<br>data" data-en="Pricing &amp;<br>data<br>analyst">Analyste<br>pricing &amp;<br>data</h2>
+            <div class="about-stats">
+                <div class="stat-card"><span class="stat-number">4+</span><span class="stat-label" data-fr="Années d'expérience" data-en="Years of experience">Années d'expérience</span></div>
+                <div class="stat-card"><span class="stat-number">7</span><span class="stat-label" data-fr="Hôtels partenaires" data-en="Partner hotels">Hôtels partenaires</span></div>
+                <div class="stat-card"><span class="stat-number">2</span><span class="stat-label" data-fr="Dashboards Tableau" data-en="Tableau dashboards">Dashboards Tableau</span></div>
+                <div class="stat-card"><span class="stat-number">MS</span><span class="stat-label" data-fr="Data Analytics NEOMA" data-en="Data Analytics NEOMA">Data Analytics NEOMA</span></div>
+            </div>
+        </div>
+        <div class="about-right">
+            <div class="about-badge" data-fr="✦ Disponible pour opportunités" data-en="✦ Open to opportunities">✦ Disponible pour opportunités</div>
+            <div class="about-text">
+                <p data-fr="Actuellement <strong>Pricing Analyst</strong> chez Disneyland Paris et étudiante en Mastère Spécialisé Data Analytics à NEOMA Business School, je transforme les données en insights actionnables pour optimiser la performance business."
+                   data-en="Currently working as a <strong>Pricing Analyst</strong> at Disneyland Paris and enrolled in the MSc Data Analytics at NEOMA Business School, I turn data into actionable insights to drive business performance.">
+                    Actuellement <strong>Pricing Analyst</strong> chez Disneyland Paris et étudiante en Mastère Spécialisé Data Analytics à NEOMA Business School, je transforme les données en insights actionnables pour optimiser la performance business.
+                </p>
+                <p data-fr="Mon parcours combine <strong>analyse de données</strong>, <strong>pricing stratégique</strong> et <strong>data visualisation</strong> dans deux secteurs qui me passionnent : le <strong>tourisme/hôtellerie</strong> (expérience Disney) et la <strong>beauté/retail</strong> (Conforama + passion makeup)."
+                   data-en="My background combines <strong>data analysis</strong>, <strong>strategic pricing</strong> and <strong>data visualisation</strong> across two industries I'm passionate about: <strong>hospitality &amp; tourism</strong> (Disney experience) and <strong>beauty &amp; retail</strong> (Conforama + makeup passion).">
+                    Mon parcours combine <strong>analyse de données</strong>, <strong>pricing stratégique</strong> et <strong>data visualisation</strong> dans deux secteurs qui me passionnent : le <strong>tourisme/hôtellerie</strong> (expérience Disney) et la <strong>beauté/retail</strong> (Conforama + passion makeup).
+                </p>
+                <p data-fr="Je construis mes projets autour de mes expériences concrètes — comme AURA Shade, né directement de ma recherche ISG sur les pratiques de dépigmentation en Afrique."
+                   data-en="I build my projects around real-world experience — like AURA Shade, born from my ISG research on skin-lightening practices in Africa.">
+                    Je construis mes projets autour de mes expériences concrètes — comme AURA Shade, né directement de ma recherche ISG sur les pratiques de dépigmentation en Afrique.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+    <div class="section-label" data-fr="COMPÉTENCES" data-en="SKILLS">COMPÉTENCES</div>
+    <h2 class="section-title" data-fr="Mon stack" data-en="My stack">Mon stack</h2>
+    <p class="section-sub" data-fr="Outils &amp; savoir-faire au service de la data et du business" data-en="Tools &amp; expertise at the service of data and business">Outils &amp; savoir-faire au service de la data et du business</p>
+    <div class="skills-grid">
+        <div class="skill-cat">
+            <div class="skill-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
+            <div class="skill-cat-title" data-fr="Data &amp; Business Intelligence" data-en="Data &amp; Business Intelligence">Data &amp; Business Intelligence</div>
+            <div class="skill-item"><div class="skill-row"><span class="skill-name">Tableau</span><span class="skill-pct" data-fr="Avancé" data-en="Advanced">Avancé</span></div><div class="skill-bar"><div class="skill-fill" data-w="90"></div></div></div>
+            <div class="skill-item"><div class="skill-row"><span class="skill-name">Power BI</span><span class="skill-pct" data-fr="Avancé" data-en="Advanced">Avancé</span></div><div class="skill-bar"><div class="skill-fill" data-w="85"></div></div></div>
+            <div class="skill-item"><div class="skill-row"><span class="skill-name" data-fr="Excel avancé" data-en="Advanced Excel">Excel avancé</span><span class="skill-pct" data-fr="Expert" data-en="Expert">Expert</span></div><div class="skill-bar"><div class="skill-fill" data-w="95"></div></div></div>
+            <div class="skill-item"><div class="skill-row"><span class="skill-name">Google Data Studio</span><span class="skill-pct" data-fr="Intermédiaire" data-en="Intermediate">Intermédiaire</span></div><div class="skill-bar"><div class="skill-fill" data-w="68"></div></div></div>
+        </div>
+        <div class="skill-cat">
+            <div class="skill-icon"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg></div>
+            <div class="skill-cat-title" data-fr="Data Engineering &amp; SQL" data-en="Data Engineering &amp; SQL">Data Engineering &amp; SQL</div>
+            <div class="skill-item"><div class="skill-row"><span class="skill-name">SQL</span><span class="skill-pct" data-fr="Avancé" data-en="Advanced">Avancé</span></div><div class="skill-bar"><div class="skill-fill" data-w="88"></div></div></div>
+            <div class="skill-item"><div class="skill-row"><span class="skill-name">Snowflake</span><span class="skill-pct" data-fr="Avancé" data-en="Advanced">Avancé</span></div><div class="skill-bar"><div class="skill-fill" data-w="80"></div></div></div>
+            <div class="skill-item"><div class="skill-row"><span class="skill-name">BigQuery</span><span class="skill-pct" data-fr="Intermédiaire" data-en="Intermediate">Intermédiaire</span></div><div class="skill-bar"><div class="skill-fill" data-w="65"></div></div></div>
+            <div class="skill-item"><div class="skill-row"><span class="skill-name">SAP legacy</span><span class="skill-pct" data-fr="Intermédiaire" data-en="Intermediate">Intermédiaire</span></div><div class="skill-bar"><div class="skill-fill" data-w="60"></div></div></div>
+        </div>
+        <div class="skill-cat">
+            <div class="skill-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+            <div class="skill-cat-title" data-fr="Pricing &amp; Business Strategy" data-en="Pricing &amp; Business Strategy">Pricing &amp; Business Strategy</div>
+            <div class="skill-item"><div class="skill-row"><span class="skill-name" data-fr="Revenue Management" data-en="Revenue Management">Revenue Management</span><span class="skill-pct" data-fr="Avancé" data-en="Advanced">Avancé</span></div><div class="skill-bar"><div class="skill-fill" data-w="85"></div></div></div>
+            <div class="skill-item"><div class="skill-row"><span class="skill-name" data-fr="Pricing dynamique" data-en="Dynamic pricing">Pricing dynamique</span><span class="skill-pct" data-fr="Avancé" data-en="Advanced">Avancé</span></div><div class="skill-bar"><div class="skill-fill" data-w="88"></div></div></div>
+            <div class="skill-item"><div class="skill-row"><span class="skill-name" data-fr="Modélisation Excel pricing" data-en="Excel pricing model">Modélisation Excel pricing</span><span class="skill-pct" data-fr="Expert" data-en="Expert">Expert</span></div><div class="skill-bar"><div class="skill-fill" data-w="92"></div></div></div>
+            <div class="skill-item"><div class="skill-row"><span class="skill-name" data-fr="Go-To-Market strategy" data-en="Go-To-Market strategy">Go-To-Market strategy</span><span class="skill-pct" data-fr="Intermédiaire" data-en="Intermediate">Intermédiaire</span></div><div class="skill-bar"><div class="skill-fill" data-w="72"></div></div></div>
+        </div>
+    </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+    <div class="section-label" data-fr="EXPÉRIENCES" data-en="EXPERIENCE">EXPÉRIENCES</div>
+    <h2 class="section-title" data-fr="Mon parcours" data-en="My journey">Mon parcours</h2>
+    <p class="section-sub" data-fr="Deux alternances qui m'ont formée sur le terrain" data-en="Two apprenticeships that shaped me in the field">Deux alternances qui m'ont formée sur le terrain</p>
+    <div class="exp-grid">
+        <div class="exp-card">
+            <div class="exp-header">
+                <div class="icon-box"><svg viewBox="0 0 24 24"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/><path d="M12 3v4M8 7h8"/></svg></div>
+                <div class="exp-title">
+                    <h3 data-fr="Pricing Analyst" data-en="Pricing Analyst">Pricing Analyst</h3>
+                    <div class="exp-company">Disneyland Paris</div>
+                    <div class="exp-period" data-fr="Sept 2025 – Sept 2026 · Alternance" data-en="Sept 2025 – Sept 2026 · Apprenticeship">Sept 2025 – Sept 2026 · Alternance</div>
+                </div>
+            </div>
+            <p class="exp-desc"
+               data-fr="Référente performance des <strong>7 hôtels partenaires</strong> (B&amp;B Hotel, Adagio) depuis le lancement de la nouvelle offre packages en octobre 2025."
+               data-en="Performance lead for the <strong>7 partner hotels</strong> (B&amp;B Hotel, Adagio) since the launch of the new packages offering in October 2025.">
+               Référente performance des <strong>7 hôtels partenaires</strong> (B&amp;B Hotel, Adagio) depuis le lancement de la nouvelle offre packages en octobre 2025.
+            </p>
+            <ul class="exp-list">
+                <li data-fr="<strong>Workflow analytics complet</strong> : requêtes SAP legacy → migration SQL Snowflake → data quality checks → modèles Excel → dashboards Tableau (Yield Hotel, Yield Park, Sales)" data-en="<strong>End-to-end analytics workflow</strong>: SAP legacy queries → SQL Snowflake migration → data quality checks → Excel models → Tableau dashboards (Yield Hotel, Yield Park, Sales)"><strong>Workflow analytics complet</strong> : requêtes SAP legacy → migration SQL Snowflake → data quality checks → modèles Excel → dashboards Tableau (Yield Hotel, Yield Park, Sales)</li>
+                <li data-fr="<strong>2 dashboards Tableau</strong> créés : 5 pages chacun, KPIs cards, paramètres interactifs, comparaisons année précédente" data-en="<strong>2 Tableau dashboards</strong> built: 5 pages each, KPI cards, interactive parameters, year-on-year comparisons"><strong>2 dashboards Tableau</strong> créés : 5 pages chacun, KPIs cards, paramètres interactifs, comparaisons année précédente</li>
+                <li data-fr="<strong>Suivi KPIs pricing &amp; revenue</strong> : ADR, PDR, Package Revenue, Room Nights, LOS par saison pricing" data-en="<strong>Pricing &amp; revenue KPI tracking</strong>: ADR, PDR, Package Revenue, Room Nights, LOS by pricing season"><strong>Suivi KPIs pricing &amp; revenue</strong> : ADR, PDR, Package Revenue, Room Nights, LOS par saison pricing</li>
+                <li data-fr="Analyses post-lancement Land Frozen et optimisation quotas" data-en="Post-launch analyses for Land Frozen and quota optimisation">Analyses post-lancement Land Frozen et optimisation quotas</li>
+                <li data-fr="Présentations trimestrielles Sales, Marketing &amp; Revenue Management" data-en="Quarterly presentations to Sales, Marketing &amp; Revenue Management">Présentations trimestrielles Sales, Marketing &amp; Revenue Management</li>
+            </ul>
+        </div>
+        <div class="exp-card">
+            <div class="exp-header">
+                <div class="icon-box"><svg viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></div>
+                <div class="exp-title">
+                    <h3 data-fr="Chef de Produit – Reporting &amp; Performance" data-en="Product Manager – Reporting &amp; Performance">Chef de Produit – Reporting &amp; Performance</h3>
+                    <div class="exp-company">Conforama</div>
+                    <div class="exp-period" data-fr="Août 2022 – Sept 2024 · Alternance" data-en="Aug 2022 – Sept 2024 · Apprenticeship">Août 2022 – Sept 2024 · Alternance</div>
+                </div>
+            </div>
+            <p class="exp-desc"
+               data-fr="Pilotage de la performance commerciale des offres de services (assurances) via reporting hebdomadaire et dashboards Power BI."
+               data-en="Drove commercial performance tracking for service offerings (insurance) through weekly reporting and Power BI dashboards.">
+               Pilotage de la performance commerciale des offres de services (assurances) via reporting hebdomadaire et dashboards Power BI.
+            </p>
+            <ul class="exp-list">
+                <li data-fr="Reportings hebdomadaires : suivi ventes et analyse des performances des offres de services" data-en="Weekly reporting: sales tracking and performance analysis of service offerings">Reportings hebdomadaires : suivi ventes et analyse des performances des offres de services</li>
+                <li data-fr="Création de dashboards Power BI et pilotage du projet de refonte reporting (expression de besoin IT)" data-en="Created Power BI dashboards and led reporting redesign project (IT requirements specification)">Création de dashboards Power BI et pilotage du projet de refonte reporting (expression de besoin IT)</li>
+                <li data-fr="Présentations mensuelles auprès de <strong>200+ collaborateurs</strong>" data-en="Monthly presentations to <strong>200+ employees</strong>">Présentations mensuelles auprès de <strong>200+ collaborateurs</strong></li>
+                <li data-fr="Identification des tendances et recommandations d'optimisation" data-en="Trend identification and optimisation recommendations">Identification des tendances et recommandations d'optimisation</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+    <div class="section-label" data-fr="PROJETS" data-en="PROJECTS">PROJETS</div>
+    <h2 class="section-title" data-fr="Cas pratiques" data-en="Case studies">Cas pratiques</h2>
+    <p class="section-sub" data-fr="Projets data-driven construits autour de mes passions" data-en="Data-driven projects built around my passions">Projets data-driven construits autour de mes passions</p>
+
+    <!-- AURA Shade -->
+    <div class="project-card">
+        <div class="project-visual">
+            <img src="images/product and box_removebg-preview.png" alt="AURA Shade" class="project-logo"
+                 onerror="this.style.display='none'; document.getElementById('aura-ph').style.display='block';">
+            <div class="proj-logo-ph" id="aura-ph" style="display:none;">
+                <div class="pn">AURA Shade</div>
+                <div class="pt">"Every Shade, Elevated"</div>
+            </div>
+        </div>
+        <div class="project-info">
+            <div class="project-type" data-fr="Pricing Strategy · Beauté Inclusive" data-en="Pricing Strategy · Inclusive Beauty">Pricing Strategy · Beauté Inclusive</div>
+            <h3>AURA Shade</h3>
+            <p class="proj-tagline">"Every Shade, Elevated"</p>
+            <p class="proj-desc"
+               data-fr="Lancement d'un sérum teinté inclusif (50 teintes) né de ma recherche ISG sur les pratiques de dépigmentation en Afrique. Une réponse éthique et data-driven : <strong>Radiant Skin Serum SPF30</strong>, alternative safe aux produits de blanchiment dangereux."
+               data-en="Launch of an inclusive tinted serum (50 shades) born from my ISG research on skin-lightening practices in Africa. An ethical, data-driven response: <strong>Radiant Skin Serum SPF30</strong>, a safe alternative to harmful bleaching products.">
+               Lancement d'un sérum teinté inclusif (50 teintes) né de ma recherche ISG sur les pratiques de dépigmentation en Afrique. Une réponse éthique et data-driven : <strong>Radiant Skin Serum SPF30</strong>, alternative safe aux produits de blanchiment dangereux.
+            </p>
+            <div class="proj-tags">
+                <span class="p-tag" data-fr="Pricing Strategy" data-en="Pricing Strategy">Pricing Strategy</span>
+                <span class="p-tag" data-fr="Modèle Excel" data-en="Excel Model">Modèle Excel</span>
+                <span class="p-tag" data-fr="Dashboard Power BI" data-en="Power BI Dashboard">Dashboard Power BI</span>
+                <span class="p-tag" data-fr="Beauté Inclusive" data-en="Inclusive Beauty">Beauté Inclusive</span>
+                <span class="p-tag" data-fr="Recherche ISG" data-en="ISG Research">Recherche ISG</span>
+            </div>
+            <a href="aura-shade.html" class="proj-link" data-fr="Voir le projet complet →" data-en="View full project →">Voir le projet complet →</a>
+        </div>
+    </div>
+
+    <!-- Disney card -->
+    <div class="disney-card" onclick="window.location='disney.html'">
+        <div class="disney-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
+        </div>
+        <div class="disney-info">
+            <div class="disney-tags">
+                <span class="p-tag">Tableau</span>
+                <span class="p-tag">SQL · Snowflake</span>
+                <span class="p-tag" data-fr="Pricing · Revenue" data-en="Pricing · Revenue">Pricing · Revenue</span>
+            </div>
+            <h4>Disneyland Paris · Partner Hotel Dashboard</h4>
+            <p data-fr="4 pages interactives · Workflow SAP → Snowflake → Tableau · 7 hôtels partenaires" data-en="4 interactive pages · SAP → Snowflake → Tableau workflow · 7 partner hotels">4 pages interactives · Workflow SAP → Snowflake → Tableau · 7 hôtels partenaires</p>
+            <a href="disney.html" class="disney-link" data-fr="Voir le projet →" data-en="View project →">Voir le projet →</a>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer id="contact">
+    <div class="footer-content">
+        <h3 data-fr="Travaillons ensemble" data-en="Let's work together">Travaillons ensemble</h3>
+        <p data-fr="Vous cherchez une analyste pricing/data pour transformer vos données en stratégies actionnables ? Je serais ravie d'échanger." data-en="Looking for a pricing/data analyst to turn your data into actionable strategies? I'd love to connect.">Vous cherchez une analyste pricing/data pour transformer vos données en stratégies actionnables ? Je serais ravie d'échanger.</p>
+        <div class="footer-links">
+            <a href="mailto:amyfofana162@yahoo.fr">
+                <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                amyfofana162@yahoo.fr
+            </a>
+            <a href="https://linkedin.com/in/amy-fofana" target="_blank">
+                <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+                LinkedIn
+            </a>
+            <a href="tel:+33665382048">
+                <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 01.22 1.18 2 2 0 012.22 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.09a16 16 0 006 6l.46-.46a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+                +33 6 65 38 20 48
+            </a>
+            <a id="cv-link" href="CV_Amy_Fofana_Fr.pdf" download>
+                <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                <span id="cv-label" data-fr="Télécharger mon CV" data-en="Download my CV">Télécharger mon CV</span>
+            </a>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 Amy Fofana · Pricing Analyst · Île-de-France</p>
+        </div>
+    </div>
+</footer>
+
+<script>
+    gsap.registerPlugin(ScrollTrigger);
+
+    window.addEventListener('scroll',()=>{
+        document.getElementById('nav').classList.toggle('scrolled',window.scrollY>60);
+    });
+
+    // ── LANG TOGGLE ───────────────────────────────────────────────
+    let currentLang = localStorage.getItem('lang') || 'fr';
+
+    const phrasesFR = ['Analyse de données · SQL · Tableau · Power BI','Pricing dynamique · Revenue Management','Storytelling data · Business Intelligence',"De la data à l'action business"];
+    const phrasesEN = ['Data analysis · SQL · Tableau · Power BI','Dynamic pricing · Revenue Management','Data storytelling · Business Intelligence','From data to business action'];
+
+    function setLang(lang) {
+        currentLang = lang;
+        localStorage.setItem('lang', lang);
+
+        // Toggle buttons
+        document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.textContent === lang.toUpperCase()));
+
+        // Translate all elements with data-fr / data-en
+        document.querySelectorAll('[data-fr][data-en]').forEach(el => {
+            const val = el.getAttribute('data-' + lang);
+            if (!val) return;
+            el.innerHTML = val;
+        });
+
+        // CV link switches language
+        const cvLink = document.getElementById('cv-link');
+        if (cvLink) {
+            cvLink.href = lang === 'fr' ? 'CV_Amy_Fofana_Fr.pdf' : 'CV_Amy_Fofana_English.pdf';
+        }
+
+        // Typewriter phrases
+        typewriterPhrases = lang === 'fr' ? phrasesFR : phrasesEN;
+        pi = 0; ci = 0; del = false;
+
+        // html lang attribute
+        document.documentElement.lang = lang;
+    }
+
+    // Apply saved lang on page load
+    setLang(currentLang);
+
+    // ── TYPEWRITER ────────────────────────────────────────────────
+    let typewriterPhrases = phrasesFR;
+    let pi=0, ci=0, del=false;
+    const tw = document.getElementById('tw');
+
+    function type() {
+        const p = typewriterPhrases[pi];
+        tw.textContent = del ? p.substring(0,ci-1) : p.substring(0,ci+1);
+        ci += del ? -1 : 1;
+        let s = del ? 30 : 80;
+        if (!del && ci===p.length) { s=2000; del=true; }
+        else if (del && ci===0) { del=false; pi=(pi+1)%typewriterPhrases.length; s=500; }
+        setTimeout(type, s);
+    }
+    setTimeout(type, 800);
+
+    // ── SKILL BARS ────────────────────────────────────────────────
+    const io = new IntersectionObserver(entries=>{
+        entries.forEach(e=>{
+            if(e.isIntersecting){
+                e.target.querySelectorAll('.skill-fill').forEach(f=>f.style.width=f.dataset.w+'%');
+                io.unobserve(e.target);
+            }
+        });
+    },{threshold:0.2});
+    document.querySelectorAll('.skill-cat').forEach(el=>io.observe(el));
+
+    // ── ANIMATIONS ────────────────────────────────────────────────
+    function anim(sel,from){gsap.utils.toArray(sel).forEach(el=>{gsap.fromTo(el,{opacity:0,...from},{opacity:1,y:0,x:0,scale:1,duration:0.9,ease:'power2.out',scrollTrigger:{trigger:el,start:'top 90%',toggleActions:'play none none none'}});});}
+    anim('.stat-card',{y:25});
+    anim('.skill-cat',{y:40});
+    anim('.exp-card',{y:50});
+    anim('.project-card',{y:50});
+    anim('.disney-card',{y:30});
+
+    // ── HAMBURGER ─────────────────────────────────────────────────
+    document.getElementById('hamburger').addEventListener('click',()=>document.getElementById('mobileMenu').classList.toggle('open'));
+    function closeMM(){document.getElementById('mobileMenu').classList.remove('open');}
+
+    // ── SMOOTH SCROLL ─────────────────────────────────────────────
+    document.querySelectorAll('a[href^="#"]').forEach(a=>{
+        a.addEventListener('click',e=>{
+            e.preventDefault();
+            const t=document.querySelector(a.getAttribute('href'));
+            if(t)t.scrollIntoView({behavior:'smooth',block:'start'});
+            closeMM();
+        });
+    });
+</script>
+</body>
+</html>
